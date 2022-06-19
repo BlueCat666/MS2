@@ -1,6 +1,6 @@
+getgenv().ChestsToFarm = {"Legendary","Epic"}
 if not game.IsLoaded then game.Loaded:Wait() end
 print("LOADED")
-local ChestsToFarm = {"Legendary","Epic"}
 local TimeToTp
 local Plr = game:GetService("Players").LocalPlayer
 local Chests = game:GetService("Workspace").Chests
@@ -85,11 +85,13 @@ function AutoChest()
         NoClip(true)
         while getgenv().AutoChest and task.wait() do
             local a, b = ChestCheck()
-            print(a,b)
-            wait(0.5)
-            TweenFunction2(28, Vector3.new(a.Position.X, Plr.Character.HumanoidRootPart.Position.Y, a.Position.Z))
-            wait(TimeToTp)
-            Plr.Character:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(a.Position)
+            if not a == nil then 
+                print(a,b)
+                wait(0.5)
+                TweenFunction2(28, Vector3.new(a.Position.X, Plr.Character.HumanoidRootPart.Position.Y, a.Position.Z))
+                wait(TimeToTp)
+                Plr.Character:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(a.Position)
+            end
         end
     end)
 end
@@ -104,7 +106,7 @@ function LoadOres()
             Plr_Position = Plr.Character:WaitForChild("HumanoidRootPart").Position
             TweenFunction2(28, Vector3.new(12.3043, Plr_Position.Y, 2.08528))
             wait(TimeToTp + 0.2)
-            TweenFunction2(500, Vector3.new(Plr_Position.X, -11000, Plr_Position.Z))
+            TweenFunction2(250, Vector3.new(Plr_Position.X, -11000, Plr_Position.Z))
             wait(TimeToTp + 0.2)
             TweenFunction2(10000, Vector3.new(Plr_Position.X, Plr_Position.Y, Plr_Position.Z))
             NoClip(false)
