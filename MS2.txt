@@ -4,6 +4,14 @@ local TimeToTp
 local Plr = game:GetService("Players").LocalPlayer
 local Chests = game:GetService("Workspace").Chests
 
+function Notification(text,duration)
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "Notification",
+        Text = text,
+        Duration = duration
+    })
+end
+
 function TweenFunction2(Speed, GoalPos)
     local Player = game.Players.LocalPlayer.Character.HumanoidRootPart
     local endpart = Instance.new("Part")
@@ -82,11 +90,15 @@ function AutoChest()
         NoClip(true)
         while getgenv().AutoChest and task.wait() do
             local a, b = ChestCheck()
-            print(a,b)
-            wait(0.5)
-            TweenFunction2(28, Vector3.new(a.Position.X, Plr.Character.HumanoidRootPart.Position.Y, a.Position.Z))
-            wait(TimeToTp)
-            Plr.Character:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(a.Position)
+            if a ~= nil then
+                print(a,b)
+                wait(0.5)
+                TweenFunction2(28, Vector3.new(a.Position.X, Plr.Character.HumanoidRootPart.Position.Y, a.Position.Z))
+                wait(TimeToTp)
+                Plr.Character:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(a.Position)
+            else
+                Notification("No Chest Found",5)
+            end
         end
     end)
 end
