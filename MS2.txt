@@ -1,0 +1,142 @@
+if not game.IsLoaded then game.Loaded:Wait() end
+print("LOADED")
+local ChestsToFarm = {"Legendary","Epic"}
+local TimeToTp
+local Plr = game:GetService("Players").LocalPlayer
+local Chests = game:GetService("Workspace").Chests
+
+function TweenFunction2(Speed, GoalPos)
+    local Player = game.Players.LocalPlayer.Character.HumanoidRootPart
+    local endpart = Instance.new("Part")
+    endpart.Parent = game.Workspace
+    endpart.CanCollide = false
+    endpart.Position = GoalPos
+    endpart.Anchored = true
+    endpart.Transparency = 1
+    endpart.Size = Vector3.new(0.5, 0.5, 0.5)
+    local Player = game.Players.LocalPlayer.Character.HumanoidRootPart
+    local TweenService = game:GetService("TweenService")
+    function GetTime(Distance, Speed)
+        local Time = Distance / Speed
+        return Time
+    end
+    local Distance = (Player.Position - endpart.Position).magnitude
+    local Time = GetTime(Distance, Speed)
+    TimeToTp = Time
+    local goal = {}
+    goal.CFrame = endpart.CFrame
+    local NewTweenInfoTable = TweenInfo.new(
+        Time, 
+        Enum.EasingStyle.Linear, 
+        Enum.EasingDirection.Out, 
+        0, 
+        false, 
+        0 
+    )
+    local Tween = TweenService:Create(Player, NewTweenInfoTable, goal)
+    Player.Anchored = true
+    Tween:Play()
+    Player.Anchored = false
+end
+
+function ChestCheck()
+    local lowestmagnitude = 9999999 
+    local closestpart = nil
+    for i,v in pairs(game:GetService("Workspace").Chests:GetChildren()) do 
+        for i,Chest in ipairs(ChestsToFarm) do 
+            if v.Name == Chest then
+                if (Plr.Character:WaitForChild("HumanoidRootPart").Position - v.Part.Position).Magnitude < 4500 then
+                    local a = Vector3.new(Plr.Character:WaitForChild("HumanoidRootPart").Position.X,0,Plr.Character:WaitForChild("HumanoidRootPart").Position.Z)
+                    local b = Vector3.new(v.Part.Position.X,0,v.Part.Position.Z)
+                    local check = (a-b).Magnitude
+                    if check < lowestmagnitude then 
+                        lowestmagnitude = check 
+                        closestpart = v.Part
+                    end
+                end
+            end
+        end
+    end 
+	return closestpart , lowestmagnitude
+end
+
+local Stepped
+function NoClip(kek)
+    local runService = game:GetService('RunService')
+    if kek then
+        Stepped = runService.Stepped:Connect(function()
+            for _, v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+                pcall(function()
+                    if v:IsA("BasePart") then
+                        v.CanCollide = false
+                    end
+                end)
+            end
+        end)
+    else
+        if Stepped then
+            Stepped:Disconnect()
+        end
+    end
+end
+
+function AutoChest()
+    task.spawn(function()   
+        NoClip(true)
+        while getgenv().AutoChest and task.wait() do
+            local a, b = ChestCheck()
+            print(a,b)
+            wait(0.5)
+            TweenFunction2(28, Vector3.new(a.Position.X, Plr.Character.HumanoidRootPart.Position.Y, a.Position.Z))
+            wait(TimeToTp)
+            Plr.Character:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(a.Position)
+        end
+    end)
+end
+
+
+function LoadOres()
+    task.spawn(function()
+        if not getgenv().AutoChest then     
+            game:GetService("ReplicatedStorage").Events.Teleport:FireServer("Surface")
+            NoClip(true)
+            wait(0.5)
+            Plr_Position = Plr.Character:WaitForChild("HumanoidRootPart").Position
+            TweenFunction2(28, Vector3.new(12.3043, Plr_Position.Y, 2.08528))
+            wait(TimeToTp + 0.2)
+            TweenFunction2(500, Vector3.new(Plr_Position.X, -11000, Plr_Position.Z))
+            wait(TimeToTp + 0.2)
+            TweenFunction2(10000, Vector3.new(Plr_Position.X, Plr_Position.Y, Plr_Position.Z))
+            NoClip(false)
+        end
+    end)
+end
+
+
+
+
+
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/GreyCaat/GC-Library/main/Lib.txt", true))()
+
+local main = library:CreateMain("Mining Simulator 2", "Blue Cat#4746")
+
+local a = main:CreateTab("Chests")
+
+local a1 = a:CreateToggle("Teleport To Chest", function(bool)
+    getgenv().AutoChest = bool
+    if bool then
+        AutoChest()
+    end
+end)
+
+local b = main:CreateTab("Ores")
+
+local b1 = b:CreateToggle("Load Ores", function(bool)
+    getgenv().AutoFarm = bool
+    if bool then
+        LoadOres()
+    else
+        NoClip(false)
+    end
+end)
+
