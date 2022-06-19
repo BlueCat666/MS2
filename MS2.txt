@@ -42,16 +42,14 @@ function ChestCheck()
     local lowestmagnitude = 9999999 
     local closestpart = nil
     for i,v in pairs(game:GetService("Workspace").Chests:GetChildren()) do 
-        for i,Chest in ipairs(getgenv().ChestsToFarm) do 
-            if v.Name == Chest then
-                if (Plr.Character:WaitForChild("HumanoidRootPart").Position - v.Part.Position).Magnitude < 4500 then
-                    local a = Vector3.new(Plr.Character:WaitForChild("HumanoidRootPart").Position.X, 0, Plr.Character:WaitForChild("HumanoidRootPart").Position.Z)
-                    local b = Vector3.new(v.Part.Position.X, 0, v.Part.Position.Z)
-                    local check = (a-b).Magnitude
-                    if check < lowestmagnitude then 
-                        lowestmagnitude = check 
-                        closestpart = v.Part
-                    end
+        if table.find(getgenv().ChestsToFarm,v.Name) then
+            if (Plr.Character:WaitForChild("HumanoidRootPart").Position - v.Part.Position).Magnitude < 4500 then
+                local a = Vector3.new(Plr.Character:WaitForChild("HumanoidRootPart").Position.X,0,Plr.Character:WaitForChild("HumanoidRootPart").Position.Z)
+                local b = Vector3.new(v.Part.Position.X,0,v.Part.Position.Z)
+                local check = (a-b).Magnitude
+                if check < lowestmagnitude then 
+                    lowestmagnitude = check 
+                    closestpart = v.Part
                 end
             end
         end
@@ -84,15 +82,11 @@ function AutoChest()
         NoClip(true)
         while getgenv().AutoChest and task.wait() do
             local a, b = ChestCheck()
-            if not a == nil then 
-                print(a,b)
-                wait(0.5)
-                TweenFunction2(28, Vector3.new(a.Position.X, Plr.Character.HumanoidRootPart.Position.Y, a.Position.Z))
-                wait(TimeToTp)
-                Plr.Character:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(a.Position)
-            else
-                print("NO CHEST FOUND")
-            end
+            print(a,b)
+            wait(0.5)
+            TweenFunction2(28, Vector3.new(a.Position.X, Plr.Character.HumanoidRootPart.Position.Y, a.Position.Z))
+            wait(TimeToTp)
+            Plr.Character:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(a.Position)
         end
     end)
 end
@@ -142,3 +136,4 @@ local b1 = b:CreateToggle("Load Ores", function(bool)
         NoClip(false)
     end
 end)
+
