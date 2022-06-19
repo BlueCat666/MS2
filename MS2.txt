@@ -32,7 +32,7 @@ function TweenFunction2(Speed, GoalPos)
         false, 
         0 
     )
-    local Tween = TweenService:Create(Player, NewTweenInfoTable, goal)
+    local Tween = TweenService:Create(Player, NewTweenInfoTable, goal)image.png
     Player.Anchored = true
     Tween:Play()
     Player.Anchored = false
@@ -90,6 +90,8 @@ function AutoChest()
                 TweenFunction2(28, Vector3.new(a.Position.X, Plr.Character.HumanoidRootPart.Position.Y, a.Position.Z))
                 wait(TimeToTp)
                 Plr.Character:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(a.Position)
+            else
+                print("NO CHEST FOUND")
             end
         end
     end)
