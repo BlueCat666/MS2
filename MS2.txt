@@ -1,4 +1,3 @@
-getgenv().ChestsToFarm = {"Legendary","Epic"}
 if not game.IsLoaded then game.Loaded:Wait() end
 print("LOADED")
 local TimeToTp
