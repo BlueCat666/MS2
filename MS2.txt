@@ -32,7 +32,7 @@ function TweenFunction2(Speed, GoalPos)
         false, 
         0 
     )
-    local Tween = TweenService:Create(Player, NewTweenInfoTable, goal)image.png
+    local Tween = TweenService:Create(Player, NewTweenInfoTable, goal)
     Player.Anchored = true
     Tween:Play()
     Player.Anchored = false
@@ -45,8 +45,8 @@ function ChestCheck()
         for i,Chest in ipairs(getgenv().ChestsToFarm) do 
             if v.Name == Chest then
                 if (Plr.Character:WaitForChild("HumanoidRootPart").Position - v.Part.Position).Magnitude < 4500 then
-                    local a = Vector3.new(Plr.Character:WaitForChild("HumanoidRootPart").Position.X,0,Plr.Character:WaitForChild("HumanoidRootPart").Position.Z)
-                    local b = Vector3.new(v.Part.Position.X,0,v.Part.Position.Z)
+                    local a = Vector3.new(Plr.Character:WaitForChild("HumanoidRootPart").Position.X, 0, Plr.Character:WaitForChild("HumanoidRootPart").Position.Z)
+                    local b = Vector3.new(v.Part.Position.X, 0, v.Part.Position.Z)
                     local check = (a-b).Magnitude
                     if check < lowestmagnitude then 
                         lowestmagnitude = check 
